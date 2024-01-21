@@ -1,0 +1,45 @@
+- name: Configure and Run Go Web Server
+  hosts: web_servers
+  become: true
+
+  tasks:
+    - name: Create destination directory
+      file:
+        path: /home/app-ansible
+        state: directory
+        mode: 0755
+
+    - name: Remove existing goapp file in remote server
+      file:
+        path: /home/app-ansible/goapp
+        state: absent
+
+    - name: Copy new binary file to remote server
+      copy:
+        src: roles/app/files/app
+        dest: /home/app-ansible/goapp
+        mode: 0755
+
+    - name: Copy nginx.conf to remote server
+      copy:
+        src: roles/app/templates/go.conf
+        dest: /etc/nginx/conf.d/go.conf 
+
+    - name: Reload systemd (daemon-reload)
+      command: sudo systemctl daemon-reload
+      become: true
+
+    - name: Reload Nginx
+      command: sudo systemctl restart nginx
+      become: true
+
+    - name: Configure systemd service
+      template:
+        src: roles/app/templates/goapp.service
+        dest: /etc/systemd/system/goapp.service
+      notify:
+        - Reload systemd
+
+    - name: Restart goapp service
+      command: "sudo service goapp restart"
+      become: true

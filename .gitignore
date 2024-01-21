@@ -1,0 +1,8 @@
+inventory/hosts
+roles/app/templates/goapp.service
+roles/app/templates/go.conf
+cmd
+root-muzz.pem
+settings.json
+.vscode
+app/task

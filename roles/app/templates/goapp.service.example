@@ -1,0 +1,11 @@
+[Unit]
+Description=Desc ur app
+
+[Service]
+Type=simple (simple = main process, independent, not obserb)
+ExecStart=path_binary_file
+Restart=restart_type (always, on-failure, no) 
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

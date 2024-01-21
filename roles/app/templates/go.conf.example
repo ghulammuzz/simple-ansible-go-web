@@ -1,0 +1,6 @@
+server {
+	server_name ur_host;
+	location / {
+		proxy_pass http://localhost:5000;	
+	}
+}
